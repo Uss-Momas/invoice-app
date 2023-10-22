@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\API\AuthController;
+use App\Http\Controllers\API\ProductController;
+use App\Http\Controllers\API\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -27,6 +29,9 @@ Route::get('/status', function (Request $request){
 });
 
 Route::prefix("v1")->group(function () {
+    Route::post("users", [UserController::class, "store"]);
+    Route::apiResource("products", ProductController::class);
+
     Route::prefix("auth")->group(function () {
         Route::controller(AuthController::class)->group(function () {
             Route::post('login', 'login');

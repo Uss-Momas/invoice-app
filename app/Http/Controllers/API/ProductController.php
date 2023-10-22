@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Products\CreateProductRequest;
+use App\Http\Requests\Products\UpdateProductRequest;
 use App\Models\Product;
 use Illuminate\Http\Request;
 
@@ -19,7 +20,10 @@ class ProductController extends Controller
      */
     public function index()
     {
-        //
+        return response()->json([
+            "message"   => 'All products',
+            "data" => Product::all()
+        ]);
     }
 
     /**
@@ -35,7 +39,7 @@ class ProductController extends Controller
      */
     public function store(CreateProductRequest $request)
     {
-        $request->validated();
+        $validated = $request->validated();
 
         $product = new Product();
         $product->name = $request->name;
@@ -54,7 +58,10 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        //
+        return response()->json([
+            "status" => "success",
+            "data" => $product
+        ]);
     }
 
     /**
@@ -68,9 +75,19 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Product $product)
+    public function update(UpdateProductRequest $request, Product $product)
     {
-        //
+        $validated = $request->validated();
+
+        $product->name = $request->name;
+        $product->description = $request->description;
+        $product->price = $request->price;
+        $product->update();
+
+        return response()->json([
+            "status" => "success",
+            "message" => "Product updated with success!",
+        ]);
     }
 
     /**
