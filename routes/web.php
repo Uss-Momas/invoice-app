@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,5 +15,13 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    // return view('welcome');
+    return response()->json([
+        "status"    =>  "success",
+        "version"   =>  "2023.10.1"
+    ]);
 });
+
+// Route::fallback(function () {
+//     return response(File::get("index.html"), 404);
+// });
