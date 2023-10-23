@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\API\AuthController;
+use App\Http\Controllers\API\OrderController;
 use App\Http\Controllers\API\ProductController;
 use App\Http\Controllers\API\UserController;
 use Illuminate\Http\Request;
@@ -30,6 +31,7 @@ Route::prefix("v1")->group(function () {
     });
     Route::post("users", [UserController::class, "store"]);
     Route::apiResource("products", ProductController::class);
+    Route::apiResource("orders", OrderController::class);
 
     Route::prefix("auth")->group(function () {
         Route::controller(AuthController::class)->group(function () {

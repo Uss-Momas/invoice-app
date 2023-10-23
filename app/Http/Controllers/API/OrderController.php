@@ -1,0 +1,109 @@
+<?php
+
+namespace App\Http\Controllers\API;
+
+use App\Http\Controllers\Controller;
+use App\Models\Order;
+use Illuminate\Http\Request;
+
+class OrderController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     */
+    public function index()
+    {
+        return response()->json([
+            "status"    => "success",
+            "data" => Order::with("products")->get()
+        ]);
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+        //
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request)
+    {
+        $request->validate([
+            "user_id" => "required",
+            "products" => "required|array",
+            "products.*.product_id" => "required|exists:products,id",
+            "products.*.quantity" => "required|numeric|min:1",
+            "amount" => "required|numeric|min:0",
+        ]);
+
+        $order = new Order();
+        $order->user_id = $request->user_id;
+        $order->order_amount = $request->amount;
+        $order->save();
+        $order->products()->attach($request->products);
+
+        return response()->json([
+            "message"   =>  "New Order created with success!",
+            "data"  =>  $order
+        ], 201);
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(Order $order)
+    {
+        return response()->json([
+            "status"    => "success",
+            "data" => Order::with("products")->find($order->id)
+        ]);
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(Order $order)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, Order $order)
+    {
+        $request->validate([
+            "user_id" => "required",
+            "products" => "required|array",
+            "products.*.product_id" => "required|exists:products,id",
+            "products.*.quantity" => "required|numeric|min:1",
+            "amount" => "required|numeric|min:0",
+        ]);
+
+        $order->user_id = $request->user_id;
+        $order->order_amount = $request->amount;
+        $order->save();
+        $order->products()->sync($request->products);
+
+        return response()->json([
+            "message"   =>  "Order Updated with success!",
+            "data"  =>  $order
+        ]);
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(Order $order)
+    {
+        $order->delete();
+        return response()->json([
+            "status"    => "success",
+            "message"   => "Order deleted with success!"
+        ]);
+    }
+}
