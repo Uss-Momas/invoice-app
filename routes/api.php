@@ -21,14 +21,13 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/status', function (Request $request){
-    return response()->json([
-        "status"    =>  "active",
-        "api_version"   =>  "2023.10.1"
-    ]);
-});
-
 Route::prefix("v1")->group(function () {
+    Route::get('/status', function (Request $request){
+        return response()->json([
+            "status"    =>  "active",
+            "api_version"   =>  "2023.10.1"
+        ]);
+    });
     Route::post("users", [UserController::class, "store"]);
     Route::apiResource("products", ProductController::class);
 
