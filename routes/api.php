@@ -28,8 +28,9 @@ Route::prefix("v1")->group(function () {
             "api_version"   =>  "2023.10.1"
         ]);
     });
-    Route::post("users", [UserController::class, "store"]);
+
     Route::apiResource("products", ProductController::class);
+    Route::apiResource("users", UserController::class);
 
     Route::prefix("auth")->group(function () {
         Route::controller(AuthController::class)->group(function () {

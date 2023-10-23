@@ -63,4 +63,15 @@ class User extends Authenticatable implements JWTSubject
     {
         return [];
     }
+
+
+    public function isAdminstrator()
+    {
+        return $this->user_type === LkUserType::ADMIN;
+    }
+
+    public function isCustomer()
+    {
+        return $this->user_type === LkUserType::CUSTOMER;
+    }
 }
