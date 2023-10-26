@@ -35,7 +35,7 @@ class OrderController extends Controller
         $request->validate([
             "user_id" => "required",
             "products" => "required|array",
-            "products.*.product_id" => "required|exists:products,id",
+            // "products.*.product_id" => "required|exists:products,id",
             "products.*.quantity" => "required|numeric|min:1",
             "amount" => "required|numeric|min:0",
         ]);
@@ -44,7 +44,15 @@ class OrderController extends Controller
         $order->user_id = $request->user_id;
         $order->order_amount = $request->amount;
         $order->save();
-        $order->products()->attach($request->products);
+        $products = [];
+        // removing unecessary data before attaching to products order table
+        foreach ($request->products as $product) {
+            unset($product["description"]);
+            unset($product["name"]);
+            unset($product["price"]);
+            array_push($products, $product);
+        }
+        $order->products()->attach($products);
 
         return response()->json([
             "message"   =>  "New Order created with success!",
