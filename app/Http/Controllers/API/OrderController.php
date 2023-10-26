@@ -35,7 +35,7 @@ class OrderController extends Controller
         $request->validate([
             "user_id" => "required",
             "products" => "required|array",
-            // "products.*.product_id" => "required|exists:products,id",
+            "products.*.product_id" => "required|exists:products,id",
             "products.*.quantity" => "required|numeric|min:1",
             "amount" => "required|numeric|min:0",
         ]);
