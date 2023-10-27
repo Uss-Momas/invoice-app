@@ -15,7 +15,7 @@ class CartController extends Controller
     {
         return response()->json([
             "status" => "success",
-            "data" => Cart::all()
+            "data" => Cart::paginate(10)
         ]);
     }
 

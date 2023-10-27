@@ -22,7 +22,7 @@ class ProductController extends Controller
     {
         return response()->json([
             "message"   => 'All products',
-            "data" => Product::all()
+            "data" => Product::paginate(10)
         ]);
     }
 

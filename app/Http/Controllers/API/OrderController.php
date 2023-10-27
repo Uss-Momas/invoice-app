@@ -19,7 +19,7 @@ class OrderController extends Controller
     {
         return response()->json([
             "status"    => "success",
-            "data" => Order::with("products")->get()
+            "data" => Order::with("products")->paginate(10)
         ]);
     }
 
