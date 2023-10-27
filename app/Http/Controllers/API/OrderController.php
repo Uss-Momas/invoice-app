@@ -4,7 +4,11 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\Order;
+use App\Models\User;
+use App\Notifications\InvoicePaidNewNotification;
+use App\Notifications\InvoicePaidNotification;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Notification;
 
 class OrderController extends Controller
 {
@@ -53,6 +57,10 @@ class OrderController extends Controller
             array_push($products, $product);
         }
         $order->products()->attach($products);
+        
+        $user = User::find(1); // Hardcoded code to send o a user in he database;
+        
+        Notification::sendNow($user, new InvoicePaidNewNotification(Order::with("products")->find($order->id)));
 
         return response()->json([
             "message"   =>  "New Order created with success!",
